@@ -26,6 +26,7 @@ public class GameController {
         whiteScore = 2;
     }
 
+
     public void swapPlayer() {
         countScore();
         currentPlayer = (currentPlayer == ChessPiece.BLACK) ? ChessPiece.WHITE : ChessPiece.BLACK;

@@ -2,9 +2,12 @@ package components;
 
 import controller.GameController;
 import model.*;
+import view.ChessBoardPanel;
 import view.GameFrame;
 
 import java.awt.*;
+
+import static view.ChessBoardPanel.setArrayToBoard;
 
 public class ChessGridComponent extends BasicComponent {
     public static int chessSize;
@@ -29,6 +32,7 @@ public class ChessGridComponent extends BasicComponent {
             if (this.chessPiece == null) {
                 this.chessPiece = GameFrame.controller.getCurrentPlayer();
                 GameFrame.controller.swapPlayer();
+                GameFrame.chessBoardPanel.setChessGrids(setArrayToBoard(ChessBoardPanel.Move(GameFrame.controller.getGamePanel().getChessGrids(),GameFrame.controller.getCurrentPlayer(),row,col)));
             }
             repaint();
         }else{

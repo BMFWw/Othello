@@ -26,6 +26,10 @@ public class ChessBoardPanel extends JPanel {
         repaint();
     }
 
+    public void setChessGrids(ChessGridComponent[][] chessGrids) {
+        this.chessGrids = chessGrids;
+    }
+
     public ChessGridComponent[][] getChessGrids() {
         return chessGrids;
     }
@@ -103,6 +107,23 @@ public class ChessBoardPanel extends JPanel {
         }
         return arrayBoard;
     }
+
+    public  static ChessGridComponent[][] setArrayToBoard(int[][] array){
+        ChessGridComponent[][] board = new ChessGridComponent[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(array[i][j] == -1){
+                    board[i][j].setChessPiece(ChessPiece.BLACK);
+                }else if(array[i][j] == 1){
+                    board[i][j].setChessPiece(ChessPiece.WHITE);
+                }else{
+                    board[i][j].setChessPiece(null);
+                }
+            }
+        }
+        return board;
+    }
+
     public static boolean canPut(ChessGridComponent[][] board, int nextMove, int row, int col){
         int[][] arrayBoard = setBoardToArray(board);
         int[][] directions = new int[][]{
@@ -142,5 +163,51 @@ public class ChessBoardPanel extends JPanel {
         } else {
             return false;
         }
+    }
+
+    public static int[][]  Move(ChessGridComponent[][] board, ChessPiece currentPlayer ,int x,int y) {
+        int[][] chessboard = new int[8][8];
+        chessboard = setBoardToArray(board);
+        int color = 0;
+        if (currentPlayer == ChessPiece.BLACK){
+            color = -1;
+        }else if(currentPlayer == ChessPiece.WHITE){
+            color = 1;
+        }
+        int[] xdirection = {-1, -1, 0, 1, 1, 1, 0, -1};
+        int[] ydirection = {0, 1, 1, 1, 0, -1, -1, -1};
+
+        chessboard[x][y] = color;
+
+        for (int k = 0; k < 8; k++) {
+            int tempx = x + xdirection[k];
+            int tempy = y + ydirection[k];
+            if ((tempx < 0 || tempx > 7) || (tempy < 0 || tempy > 7)) {
+                continue;
+            }
+            if (chessboard[tempx][tempy] == 0) {
+                continue;
+            }
+            if (chessboard[tempx][tempy] != color) {
+                while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && chessboard[tempx][tempy] != 0 && chessboard[tempx][tempy] != color) {
+
+                    tempx += xdirection[k];
+                    tempy += ydirection[k];
+                }
+                if (tempx < 0 || tempy > 7 || tempy < 0 || tempx > 7) {
+                    continue;
+                }
+                if (chessboard[tempx][tempy] == color) {
+                    tempx = x + xdirection[k];
+                    tempy = y + ydirection[k];
+                    while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && chessboard[tempx][tempy] != 0 && chessboard[tempx][tempy] != color) {
+                        chessboard[tempx][tempy] = color;
+                        tempx += xdirection[k];
+                        tempy += ydirection[k];
+                    }
+                }
+            }
+        }
+        return chessboard;
     }
 }

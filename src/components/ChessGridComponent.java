@@ -10,7 +10,6 @@ public class ChessGridComponent extends BasicComponent {
     public static int chessSize;
     public static int gridSize;
     public static Color gridColor = new Color(255, 150, 50);
-
     private ChessPiece chessPiece;
     private int row;
     private int col;

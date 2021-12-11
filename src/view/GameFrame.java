@@ -1,7 +1,8 @@
 package view;
 
-
+import components.ChessGridComponent;
 import controller.GameController;
+import model.ChessPiece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class GameFrame extends JFrame {
         this.setLocationRelativeTo(null);
 
 
+
         chessBoardPanel = new ChessBoardPanel((int) (this.getWidth() * 0.8), (int) (this.getHeight() * 0.7));
         chessBoardPanel.setLocation((this.getWidth() - chessBoardPanel.getWidth()) / 2, (this.getHeight() - chessBoardPanel.getHeight()) / 3);
 
@@ -41,7 +43,13 @@ public class GameFrame extends JFrame {
         add(restartBtn);
         restartBtn.addActionListener(e -> {
             System.out.println("click restart Btn");
-        });
+            chessBoardPanel.clearChessPieces();
+            chessBoardPanel.initialGame();
+            controller.setCurrentPlayer(ChessPiece.BLACK);
+            statusPanel.setPlayerText("BLACK");
+            statusPanel.setScoreText(2,2);
+            repaint();
+            });
 
         JButton loadGameBtn = new JButton("Load");
         loadGameBtn.setSize(120, 50);

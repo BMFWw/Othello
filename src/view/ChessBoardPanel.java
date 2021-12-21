@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class ChessBoardPanel extends JPanel {
     private final int CHESS_COUNT = 8;
-    private ChessGridComponent[][] chessGrids;
+    public static ChessGridComponent[][] chessGrids;
 
     public ChessBoardPanel(int width, int height) {
         this.setVisible(true);
@@ -21,11 +21,12 @@ public class ChessBoardPanel extends JPanel {
         ChessGridComponent.chessSize = (int) (ChessGridComponent.gridSize * 0.8);
         System.out.printf("width = %d height = %d gridSize = %d chessSize = %d\n",
                 width, height, ChessGridComponent.gridSize, ChessGridComponent.chessSize);
+
         initialChessGrids();//return empty chessboard
         initialGame();//add initial four chess
+
         repaint();
     }
-
     public void changePanel(ChessPiece currentPlayer,int row,int col){
         setChessGrids(Move(chessGrids,currentPlayer,row,col));
         repaint();
@@ -39,12 +40,12 @@ public class ChessBoardPanel extends JPanel {
     public ChessGridComponent[][] getChessGrids() {
         return chessGrids;
     }
-
     /**
      * set an empty chessboard
      */
     public void initialChessGrids() {
         chessGrids = new ChessGridComponent[CHESS_COUNT][CHESS_COUNT];
+
         //draw all chess grids
         for (int i = 0; i < CHESS_COUNT; i++) {
             for (int j = 0; j < CHESS_COUNT; j++) {
@@ -56,19 +57,18 @@ public class ChessBoardPanel extends JPanel {
         }
     }
 
-
     /**
      * initial origin four chess
      */
     public void initialGame() {
-
         chessGrids[3][3].setChessPiece(ChessPiece.BLACK);
         chessGrids[3][4].setChessPiece(ChessPiece.WHITE);
         chessGrids[4][3].setChessPiece(ChessPiece.WHITE);
         chessGrids[4][4].setChessPiece(ChessPiece.BLACK);
+        repaint();
     }
 
-   public void clearChessPieces(){
+    public void clearChessPieces(){
         for(int i=0;i<8;i++){
             for(int e=0;e<8;e++){
                 chessGrids[i][e].setChessPiece(null);
@@ -80,8 +80,8 @@ public class ChessBoardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.setColor(new Color(211, 13, 108, 204));//11111111111111
+       g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 
     public boolean canClickGrid(int row, int col, ChessPiece currentPlayer) {
@@ -98,7 +98,6 @@ public class ChessBoardPanel extends JPanel {
             return false;
         }
     }
-
     public static int[][] setBoardToArray(ChessGridComponent[][] board){
         int[][] arrayBoard = new int[8][8];
         for(int i = 0;i<8;i++){
@@ -151,6 +150,7 @@ public class ChessBoardPanel extends JPanel {
         }
         return false;
     }
+
 
     public static boolean canPutPerDirection(int[][] board, int nextMove, int row, int col, int[] direction){
         if (board[row][col] != 0){
@@ -217,5 +217,4 @@ public class ChessBoardPanel extends JPanel {
         }
         return board;
     }
-
 }

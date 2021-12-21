@@ -1,7 +1,6 @@
 package components;
 
-import model.*;
-import view.ChessBoardPanel;
+import model.ChessPiece;
 import view.GameFrame;
 
 import java.awt.*;
@@ -9,7 +8,7 @@ import java.awt.*;
 public class ChessGridComponent extends BasicComponent {
     public static int chessSize;
     public static int gridSize;
-    public static Color gridColor = new Color(255, 150, 50);
+    public static Color gridColor = new Color(0, 255, 255, 204);
     private ChessPiece chessPiece;
     private int row;
     private int col;

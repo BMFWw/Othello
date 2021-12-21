@@ -1,13 +1,10 @@
 package components;
 
-import controller.GameController;
 import model.*;
 import view.ChessBoardPanel;
 import view.GameFrame;
 
 import java.awt.*;
-
-import static view.ChessBoardPanel.setArrayToBoard;
 
 public class ChessGridComponent extends BasicComponent {
     public static int chessSize;
@@ -19,7 +16,6 @@ public class ChessGridComponent extends BasicComponent {
 
     public ChessGridComponent(int row, int col) {
         this.setSize(gridSize, gridSize);
-
         this.row = row;
         this.col = col;
     }
@@ -31,12 +27,12 @@ public class ChessGridComponent extends BasicComponent {
         if (GameFrame.controller.canClick(row, col)) {
             if (this.chessPiece == null) {
                 this.chessPiece = GameFrame.controller.getCurrentPlayer();
-                GameFrame.controller.swapPlayer();
-                GameFrame.chessBoardPanel.setChessGrids(setArrayToBoard(ChessBoardPanel.Move(GameFrame.controller.getGamePanel().getChessGrids(),GameFrame.controller.getCurrentPlayer(),row,col)));
             }
+            GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),row,col);
             repaint();
+            GameFrame.controller.swapPlayer();
         }else{
-            System.out.printf("Cannot click on this square");
+            System.out.printf("Cannot click on this square\n");
         }
     }
 

@@ -1,6 +1,5 @@
 package view;
 
-import components.ChessGridComponent;
 import controller.GameController;
 import model.ChessPiece;
 
@@ -9,8 +8,32 @@ import java.awt.*;
 
 public class GameFrame extends JFrame {
     public static GameController controller;
-    private ChessBoardPanel chessBoardPanel;
+    public static ChessBoardPanel chessBoardPanel;
     private StatusPanel statusPanel;
+
+    public GameController getController() {
+        return controller;
+    }
+
+    public ChessBoardPanel getChessBoardPanel() {
+        return chessBoardPanel;
+    }
+
+    public StatusPanel getStatusPanel() {
+        return statusPanel;
+    }
+
+    public static void setController(GameController controller) {
+        GameFrame.controller = controller;
+    }
+
+    public  void setChessBoardPanel() {
+        this.chessBoardPanel = GameFrame.controller.getGamePanel();
+    }
+
+    public void setStatusPanel(StatusPanel statusPanel) {
+        this.statusPanel = statusPanel;
+    }
 
     public GameFrame(int frameSize) {
 
@@ -45,10 +68,10 @@ public class GameFrame extends JFrame {
             System.out.println("click restart Btn");
             chessBoardPanel.clearChessPieces();
             chessBoardPanel.initialGame();
+            repaint();
             controller.setCurrentPlayer(ChessPiece.BLACK);
             statusPanel.setPlayerText("BLACK");
             statusPanel.setScoreText(2,2);
-            repaint();
             });
 
         JButton loadGameBtn = new JButton("Load");

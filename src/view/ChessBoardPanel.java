@@ -26,6 +26,12 @@ public class ChessBoardPanel extends JPanel {
         repaint();
     }
 
+    public void changePanel(ChessPiece currentPlayer,int row,int col){
+        setChessGrids(Move(chessGrids,currentPlayer,row,col));
+        repaint();
+    }
+
+
     public void setChessGrids(ChessGridComponent[][] chessGrids) {
         this.chessGrids = chessGrids;
     }
@@ -49,6 +55,7 @@ public class ChessBoardPanel extends JPanel {
             }
         }
     }
+
 
     /**
      * initial origin four chess
@@ -108,13 +115,20 @@ public class ChessBoardPanel extends JPanel {
         return arrayBoard;
     }
 
-    public  static ChessGridComponent[][] setArrayToBoard(int[][] array){
+    public static ChessGridComponent[][] setArrayToBoard(int[][] array){
         ChessGridComponent[][] board = new ChessGridComponent[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessGridComponent gridComponent = new ChessGridComponent(i, j);
+                gridComponent.setLocation(j * ChessGridComponent.gridSize, i * ChessGridComponent.gridSize);
+                board[i][j] = gridComponent;
+            }
+        }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(array[i][j] == -1){
                     board[i][j].setChessPiece(ChessPiece.BLACK);
-                }else if(array[i][j] == 1){
+                }if(array[i][j] == 1){
                     board[i][j].setChessPiece(ChessPiece.WHITE);
                 }else{
                     board[i][j].setChessPiece(null);
@@ -165,19 +179,12 @@ public class ChessBoardPanel extends JPanel {
         }
     }
 
-    public static int[][]  Move(ChessGridComponent[][] board, ChessPiece currentPlayer ,int x,int y) {
-        int[][] chessboard = new int[8][8];
-        chessboard = setBoardToArray(board);
-        int color = 0;
-        if (currentPlayer == ChessPiece.BLACK){
-            color = -1;
-        }else if(currentPlayer == ChessPiece.WHITE){
-            color = 1;
-        }
+    public static ChessGridComponent[][]  Move(ChessGridComponent[][] board, ChessPiece currentPlayer ,int x,int y) {
+
         int[] xdirection = {-1, -1, 0, 1, 1, 1, 0, -1};
         int[] ydirection = {0, 1, 1, 1, 0, -1, -1, -1};
 
-        chessboard[x][y] = color;
+        board[x][y].setChessPiece(currentPlayer);
 
         for (int k = 0; k < 8; k++) {
             int tempx = x + xdirection[k];
@@ -185,11 +192,11 @@ public class ChessBoardPanel extends JPanel {
             if ((tempx < 0 || tempx > 7) || (tempy < 0 || tempy > 7)) {
                 continue;
             }
-            if (chessboard[tempx][tempy] == 0) {
+            if (board[tempx][tempy].getChessPiece() == null) {
                 continue;
             }
-            if (chessboard[tempx][tempy] != color) {
-                while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && chessboard[tempx][tempy] != 0 && chessboard[tempx][tempy] != color) {
+            if (board[tempx][tempy].getChessPiece() != currentPlayer) {
+                while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && board[tempx][tempy].getChessPiece() != null && board[tempx][tempy].getChessPiece() != currentPlayer) {
 
                     tempx += xdirection[k];
                     tempy += ydirection[k];
@@ -197,17 +204,18 @@ public class ChessBoardPanel extends JPanel {
                 if (tempx < 0 || tempy > 7 || tempy < 0 || tempx > 7) {
                     continue;
                 }
-                if (chessboard[tempx][tempy] == color) {
+                if (board[tempx][tempy].getChessPiece() == currentPlayer) {
                     tempx = x + xdirection[k];
                     tempy = y + ydirection[k];
-                    while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && chessboard[tempx][tempy] != 0 && chessboard[tempx][tempy] != color) {
-                        chessboard[tempx][tempy] = color;
+                    while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && board[tempx][tempy].getChessPiece() != null && board[tempx][tempy].getChessPiece() != currentPlayer) {
+                        board[tempx][tempy].setChessPiece(currentPlayer);
                         tempx += xdirection[k];
                         tempy += ydirection[k];
                     }
                 }
             }
         }
-        return chessboard;
+        return board;
     }
+
 }

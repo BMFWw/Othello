@@ -1,6 +1,5 @@
 package controller;
 
-import components.ChessGridComponent;
 import model.ChessPiece;
 import view.*;
 
@@ -51,6 +50,7 @@ public class GameController {
     }
 
 
+
     public ChessPiece getCurrentPlayer() {
         return currentPlayer;
     }
@@ -87,6 +87,20 @@ public class GameController {
 
     public void writeDataToFile(String fileName) {
         //todo: write data into file
+        try{
+            int[][] content = gamePanel.setBoardToArray(gamePanel.getChessGrids());
+            File file = new File("%s.txt",fileName);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(content.toString());
+            bufferedWriter.close();
+            System.out.println("finished");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean canClick(int row, int col) {

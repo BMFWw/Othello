@@ -6,6 +6,7 @@ import java.net.URL;
 
 public class StartWindow extends JFrame {
     public void gameWindow() {
+        //创建面板标题
         this.setTitle("2021F CS102A Project Reversi");
         //插入背景图片
         ImageIcon background = new ImageIcon("CHESS/src/view/pictures/background.png");
@@ -33,10 +34,11 @@ public class StartWindow extends JFrame {
         button2.setBounds(165, 370, 200, 50);
 
         //初始化面板
-        this.setVisible(true);
-        this.setBounds(450, 250, 960, 540);
-        this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setSize(960, 540);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.setResizable(false);
 
         //设置面板中容器，并设置自由布局类型
         Container container = this.getContentPane();

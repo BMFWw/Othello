@@ -52,9 +52,13 @@ public class ChessGridComponent extends BasicComponent {
         return col;
     }
 
-    public void drawPiece(Graphics g) {
+    public void drawPieceCanPut(Graphics g){//能画的地方显示高光
+        g.setColor(new Color(0, 255, 255));
+        g.fillRect(2, 2, this.getWidth() - 2, this.getHeight() - 2);
+    }
+    public void drawPiece(Graphics g) {//画棋盘格子，每个格子都被分成小组件
         g.setColor(gridColor);
-        g.fillRect(1, 1, this.getWidth() - 2, this.getHeight() - 2);
+        g.fillRect(2, 2, this.getWidth() - 2, this.getHeight() - 2);
         if (this.chessPiece != null) {
             g.setColor(chessPiece.getColor());
             g.fillOval((gridSize - chessSize) / 2, (gridSize - chessSize) / 2, chessSize, chessSize);
@@ -66,6 +70,14 @@ public class ChessGridComponent extends BasicComponent {
     public void paintComponent(Graphics g) {
         super.printComponents(g);
         drawPiece(g);
+
+        for (int i = 0; i < 8; i++) {//遍历棋盘，能画的地方显示高光
+            for (int j = 0; j < 8; j++) {
+                if(GameFrame.controller.canClick(row, col)){
+                 drawPieceCanPut(g);
+                }
+            }
+        }
     }
 
 

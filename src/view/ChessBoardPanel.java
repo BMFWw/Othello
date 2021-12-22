@@ -6,6 +6,9 @@ import model.ChessPiece;
 import javax.swing.*;
 import java.awt.*;
 
+import static components.ChessGridComponent.chessSize;
+import static components.ChessGridComponent.gridSize;
+
 public class ChessBoardPanel extends JPanel {
     private final int CHESS_COUNT = 8;
     public static ChessGridComponent[][] chessGrids;
@@ -17,16 +20,17 @@ public class ChessBoardPanel extends JPanel {
         this.setBackground(Color.BLACK);
         int length = Math.min(width, height);
         this.setSize(length, length);
-        ChessGridComponent.gridSize = length / CHESS_COUNT;
-        ChessGridComponent.chessSize = (int) (ChessGridComponent.gridSize * 0.8);
+        gridSize = length / CHESS_COUNT;
+        chessSize = (int) (gridSize * 0.8);
         System.out.printf("width = %d height = %d gridSize = %d chessSize = %d\n",
-                width, height, ChessGridComponent.gridSize, ChessGridComponent.chessSize);
+                width, height, gridSize, chessSize);
 
         initialChessGrids();//return empty chessboard
         initialGame();//add initial four chess
 
         repaint();
     }
+
     public void changePanel(ChessPiece currentPlayer,int row,int col){
         setChessGrids(Move(chessGrids,currentPlayer,row,col));
         repaint();
@@ -50,7 +54,7 @@ public class ChessBoardPanel extends JPanel {
         for (int i = 0; i < CHESS_COUNT; i++) {
             for (int j = 0; j < CHESS_COUNT; j++) {
                 ChessGridComponent gridComponent = new ChessGridComponent(i, j);
-                gridComponent.setLocation(j * ChessGridComponent.gridSize, i * ChessGridComponent.gridSize);
+                gridComponent.setLocation(j * gridSize, i * gridSize);
                 chessGrids[i][j] = gridComponent;
                 this.add(chessGrids[i][j]);
             }
@@ -80,7 +84,7 @@ public class ChessBoardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-            g.setColor(new Color(211, 13, 108, 204));//11111111111111
+            g.setColor(new Color(211, 13, 108, 204));
        g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 
@@ -93,11 +97,13 @@ public class ChessBoardPanel extends JPanel {
             nextmove = 1;
         }
         if(canPut(chessGrids,nextmove,row,col)) {
+            //能下棋，显色
             return true;
         }else{
             return false;
         }
     }
+
     public static int[][] setBoardToArray(ChessGridComponent[][] board){
         int[][] arrayBoard = new int[8][8];
         for(int i = 0;i<8;i++){
@@ -119,7 +125,7 @@ public class ChessBoardPanel extends JPanel {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessGridComponent gridComponent = new ChessGridComponent(i, j);
-                gridComponent.setLocation(j * ChessGridComponent.gridSize, i * ChessGridComponent.gridSize);
+                gridComponent.setLocation(j * gridSize, i * gridSize);
                 board[i][j] = gridComponent;
             }
         }

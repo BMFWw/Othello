@@ -109,6 +109,7 @@ public class GameFrame extends JFrame {
         this.add(jLabel,new Integer(Integer.MIN_VALUE));
 
         this.setVisible(true);
+        this.setResizable(false);//固定窗口大小要在可视化之后
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     }

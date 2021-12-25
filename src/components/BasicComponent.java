@@ -16,4 +16,5 @@ public abstract class BasicComponent extends JComponent {
     }
 
     public abstract void onMouseClicked();
+
 }

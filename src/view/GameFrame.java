@@ -1,6 +1,7 @@
 package view;
 
 
+import components.ChessGridComponent;
 import controller.GameController;
 import model.ChessPiece;
 
@@ -61,7 +62,7 @@ public class GameFrame extends JFrame {
         chessBoardPanel.setLocation(50,50);
 
 
-        statusPanel = new StatusPanel((int) (this.getWidth() * 0.8), (int) (this.getHeight() * 0.1));
+        statusPanel = new StatusPanel((int) (this.getWidth() * 0.8), (int) (this.getHeight() * 0.08));
         statusPanel.setLocation(10,0);
         statusPanel.setBackground(null);
         statusPanel.setOpaque(false);
@@ -101,16 +102,25 @@ public class GameFrame extends JFrame {
             controller.writeDataToFile(filePath);
         });
 
+        JButton cheatModelBtn = new JButton("Cheat");
+        cheatModelBtn.setSize(120, 50);
+        cheatModelBtn.setLocation(450,370);
+        cheatModelBtn.addActionListener(e -> {
+            ChessGridComponent.cheatModel = - ChessGridComponent.cheatModel;
+
+
+        });
+
         this.add(chessBoardPanel);
         this.add(statusPanel);
         this.add(restartBtn);
         this.add(loadGameBtn);
         this.add(saveGameBtn);
+        this.add(cheatModelBtn);
         this.add(jLabel,new Integer(Integer.MIN_VALUE));
 
         this.setVisible(true);
         this.setResizable(false);//固定窗口大小要在可视化之后
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 }

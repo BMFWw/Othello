@@ -84,7 +84,7 @@ public class ChessBoardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-            g.setColor(new Color(211, 13, 108, 204));
+        g.setColor(new Color(211, 13, 108, 204));
        g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 
@@ -97,7 +97,6 @@ public class ChessBoardPanel extends JPanel {
             nextmove = 1;
         }
         if(canPut(chessGrids,nextmove,row,col)) {
-            //能下棋，显色
             return true;
         }else{
             return false;

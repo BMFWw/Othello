@@ -1,5 +1,7 @@
 package view;
 
+import music.bgm;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -48,6 +50,7 @@ public class StartWindow extends JFrame {
         container.add(button1);
         container.add(button2);
         container.add(jLabel);
+        new bgm().run();
 
         //开始游戏按钮的监听器
         button1.addActionListener(e -> {

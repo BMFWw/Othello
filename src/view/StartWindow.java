@@ -4,24 +4,21 @@ import music.bgm;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 
 public class StartWindow extends JFrame {
     public void gameWindow() {
         //创建面板标题
         this.setTitle("2021F CS102A Project Reversi");
         //插入背景图片
-        ImageIcon background = new ImageIcon("CHESS/src/view/pictures/background.png");
+        ImageIcon background = new ImageIcon(picturesInput.startBackground);
         background.setImage(background.getImage().getScaledInstance(960, 540, Image.SCALE_DEFAULT));
         JLabel jLabel = new JLabel(background);
         jLabel.setIcon(background);
         jLabel.setSize(960, 540);
 
         //把按钮图片变成图标
-        URL resource1 = StartWindow.class.getResource("pictures/StartGame.png");
-        Icon icon01 = new ImageIcon(resource1);
-        URL resource2 = StartWindow.class.getResource("pictures/rule.png");
-        Icon icon02 = new ImageIcon(resource2);
+        Icon icon01 = new ImageIcon(picturesInput.start);
+        Icon icon02 = new ImageIcon(picturesInput.rule);
 
         //开始游戏按钮
         JButton button1 = new JButton();

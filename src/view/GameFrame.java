@@ -45,7 +45,7 @@ public class GameFrame extends JFrame {
         this.setLayout(null);
 
         //插入背景图片
-        ImageIcon background = new ImageIcon("untitled/src/pictures/ChessBoardBackground.png");
+        ImageIcon background = new ImageIcon(picturesInput.chessBoardBackground);
         background.setImage(background.getImage().getScaledInstance(960, 540, Image.SCALE_DEFAULT));
         JLabel jLabel = new JLabel(background);
         jLabel.setIcon(background);

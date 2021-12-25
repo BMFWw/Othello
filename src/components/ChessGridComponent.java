@@ -4,6 +4,7 @@ import controller.GameController;
 import model.ChessPiece;
 import view.ChessBoardPanel;
 import view.GameFrame;
+import view.picturesInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -175,7 +176,7 @@ class EndDialogWin extends JDialog {
     public EndDialogWin() {//初始化文字框
         if (ChessGridComponent.countWindow == 0) {
             //插入背景图片
-            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/winGround.png");
+            ImageIcon background = new ImageIcon(picturesInput.winBackground);
             background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
             JLabel tieGround = new JLabel(background);
             tieGround.setIcon(background);
@@ -209,7 +210,7 @@ class EndDialogTie extends JDialog {
     public EndDialogTie() {//初始化文字框
         if (ChessGridComponent.countWindow == 0) {
             //插入背景图片
-            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/tieGround.png");
+            ImageIcon background = new ImageIcon(picturesInput.tieBackground);
             background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
             JLabel tieGround = new JLabel(background);
             tieGround.setIcon(background);
@@ -244,7 +245,7 @@ class EndDialogLose extends JDialog {
     public EndDialogLose() {//初始化文字框
         if (ChessGridComponent.countWindow == 0) {
             //插入背景图片
-            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/loseGround.png");
+            ImageIcon background = new ImageIcon(picturesInput.loseBackground);
             background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
             JLabel tieGround = new JLabel(background);
             tieGround.setIcon(background);

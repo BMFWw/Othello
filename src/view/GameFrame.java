@@ -12,6 +12,7 @@ public class GameFrame extends JFrame {
     public static GameController controller;
     public static ChessBoardPanel chessBoardPanel;
     private StatusPanel statusPanel;
+    public static JButton restartBtn = new JButton("Restart");
 
     public GameController getController() {
         return controller;
@@ -71,7 +72,7 @@ public class GameFrame extends JFrame {
         controller = new GameController(chessBoardPanel, statusPanel);
         controller.setGamePanel(chessBoardPanel);
 
-        JButton restartBtn = new JButton("Restart");
+
         restartBtn.setSize(120, 50);
         restartBtn.setLocation(450,70);
         restartBtn.addActionListener(e -> {
@@ -82,6 +83,8 @@ public class GameFrame extends JFrame {
             controller.setCurrentPlayer(ChessPiece.BLACK);
             statusPanel.setPlayerText("BLACK");
             statusPanel.setScoreText(2,2);
+
+            ChessGridComponent.countWindow=0;//重新开始使其归零
         });
 
         JButton loadGameBtn = new JButton("Load");
@@ -107,8 +110,6 @@ public class GameFrame extends JFrame {
         cheatModelBtn.setLocation(450,370);
         cheatModelBtn.addActionListener(e -> {
             ChessGridComponent.cheatModel = - ChessGridComponent.cheatModel;
-
-
         });
 
         this.add(chessBoardPanel);

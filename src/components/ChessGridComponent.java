@@ -7,6 +7,8 @@ import view.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 
 public class ChessGridComponent extends BasicComponent {
     public static int chessSize;
@@ -16,6 +18,8 @@ public class ChessGridComponent extends BasicComponent {
     private int row;
     private int col;
     public static int cheatModel = -1;//默认关闭
+    public static int countWindow = 0;//用于防止打开多个结束窗口
+
 
     public ChessGridComponent() {
 
@@ -28,16 +32,24 @@ public class ChessGridComponent extends BasicComponent {
     }
 
     @Override
+    public synchronized void addMouseListener(MouseListener l) {
+        super.addMouseListener(l);
+
+    }
+
+    @Override
     public void onMouseClicked() {
         System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(), row, col);
         //todo: complete mouse click method
+
 
         if (cheatModel == -1) {//cheatModel关闭
             if (GameFrame.controller.canClick(row, col)) {//规定在哪能下
                 if (this.chessPiece == null) {
                     this.chessPiece = GameFrame.controller.getCurrentPlayer();
                 }
-                GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
+                GameFrame.chessBoardPanel.
+                        changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
                 repaint();
                 GameFrame.controller.swapPlayer();
             } else {
@@ -45,11 +57,13 @@ public class ChessGridComponent extends BasicComponent {
             }
 
         } else {
-            if (this.chessPiece == null) {//只能下空的地方
-                this.chessPiece = GameFrame.controller.getCurrentPlayer();
-                GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
-                repaint();
-                GameFrame.controller.swapPlayer();
+            if(countWindow == 0) {
+                if (this.chessPiece == null) {//只能下空的地方
+                    this.chessPiece = GameFrame.controller.getCurrentPlayer();
+                    GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
+                    repaint();
+                    GameFrame.controller.swapPlayer();
+                }
             }
         }
 
@@ -97,17 +111,18 @@ public class ChessGridComponent extends BasicComponent {
         }
     }
 
+    public void Repaint() {
+        this.repaint();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.printComponents(g);
         drawPiece(g);
-
-        if(cheatModel==-1) {//cheatModel关闭时显示高光
-            if (GameFrame.controller.canClick(row, col)) {//本方法自带遍历棋盘 若能下则显示高光
-                drawPieceCanPut(g);
-            }
+        if (GameFrame.controller.canClick(row, col)) {//本方法自带遍历棋盘 若能下则显示高光
+            drawPieceCanPut(g);
         }
+
 
     }
 
@@ -123,8 +138,8 @@ public class ChessGridComponent extends BasicComponent {
             }
         }
 
-        if (count == 0) return false;
-        return true;
+        if (count == 0) return true;
+        return false;
     }
 
     //用于结束窗口中判断
@@ -132,7 +147,6 @@ public class ChessGridComponent extends BasicComponent {
         int whiteScore = new GameController().getWhiteScore();
         int blackScore = new GameController().getBlackScore();
         if (judge(this.chessPiece = GameFrame.controller.getCurrentPlayer())) {//判断游戏是否结束
-        } else {
             if (whiteScore > blackScore) {
                 return 1;
             } else if (whiteScore == blackScore) {
@@ -155,65 +169,107 @@ public class ChessGridComponent extends BasicComponent {
 }
 
 
+
+
 class EndDialogWin extends JDialog {
     public EndDialogWin() {//初始化文字框
-        //插入背景图片
-        ImageIcon background = new ImageIcon("CHESS/src/view/pictures/winGround.png");
-        background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
-        JLabel tieGround = new JLabel(background);
-        tieGround.setIcon(background);
-        tieGround.setSize(500, 300);
+        if (ChessGridComponent.countWindow == 0) {
+            //插入背景图片
+            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/winGround.png");
+            background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
+            JLabel tieGround = new JLabel(background);
+            tieGround.setIcon(background);
+            tieGround.setSize(500, 300);
 
-        this.setVisible(true);
-        this.setFocusable(true);
-        this.setSize(500, 300);
-        this.setLocationRelativeTo(null);
+            this.setAlwaysOnTop(true);//让其始终在最顶层
+            this.setVisible(true);
+            this.setFocusable(false);
+            this.setSize(500, 300);
+            this.setResizable(true);
+            this.setLocationRelativeTo(null);
 
-        Container container = this.getContentPane();
+            Container container = this.getContentPane();
 
-        container.add(tieGround, BorderLayout.CENTER);
+            container.add(tieGround, BorderLayout.CENTER);
 
+            ChessGridComponent.countWindow++;
+        }
+    }
+
+    @Override//重写关闭操作，关闭窗口就重新开始游戏
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            GameFrame.restartBtn.doClick();
+        }
+        super.processWindowEvent(e);
     }
 }
 
 class EndDialogTie extends JDialog {
     public EndDialogTie() {//初始化文字框
-        //插入背景图片
-        ImageIcon background = new ImageIcon("CHESS/src/view/pictures/tieGround.png");
-        background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
-        JLabel tieGround = new JLabel(background);
-        tieGround.setIcon(background);
-        tieGround.setSize(500, 300);
+        if (ChessGridComponent.countWindow == 0) {
+            //插入背景图片
+            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/tieGround.png");
+            background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
+            JLabel tieGround = new JLabel(background);
+            tieGround.setIcon(background);
+            tieGround.setSize(500, 300);
 
-        this.setVisible(true);
-        this.setFocusable(true);
-        this.setSize(500, 300);
-        this.setLocationRelativeTo(null);
+            this.setAlwaysOnTop(true);//让其始终在最顶层
+            this.setVisible(true);
+            this.setFocusable(false);
+            this.setSize(500, 300);
+            this.setResizable(true);
+            this.setLocationRelativeTo(null);
 
-        Container container = this.getContentPane();
+            Container container = this.getContentPane();
 
-        container.add(tieGround, BorderLayout.CENTER);
+            container.add(tieGround, BorderLayout.CENTER);
 
-
+            ChessGridComponent.countWindow++;
+        }
     }
+
+    @Override//重写关闭操作，关闭窗口就重新开始游戏
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            GameFrame.restartBtn.doClick();
+        }
+        super.processWindowEvent(e);
+    }
+
 }
 
 class EndDialogLose extends JDialog {
     public EndDialogLose() {//初始化文字框
-        //插入背景图片
-        ImageIcon background = new ImageIcon("CHESS/src/view/pictures/loseGround.png");
-        background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
-        JLabel tieGround = new JLabel(background);
-        tieGround.setIcon(background);
-        tieGround.setSize(500, 300);
+        if (ChessGridComponent.countWindow == 0) {
+            //插入背景图片
+            ImageIcon background = new ImageIcon("CHESS/src/view/pictures/loseGround.png");
+            background.setImage(background.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
+            JLabel tieGround = new JLabel(background);
+            tieGround.setIcon(background);
+            tieGround.setSize(500, 300);
 
-        this.setVisible(true);
-        this.setFocusable(true);
-        this.setSize(500, 300);
-        this.setLocationRelativeTo(null);
+            this.setAlwaysOnTop(true);//让其始终在最顶层
+            this.setVisible(true);
+            this.setFocusable(false);
+            this.setSize(500, 300);
+            this.setResizable(true);
+            this.setLocationRelativeTo(null);
 
-        Container container = this.getContentPane();
+            Container container = this.getContentPane();
 
-        container.add(tieGround, BorderLayout.CENTER);
+            container.add(tieGround, BorderLayout.CENTER);
+
+            ChessGridComponent.countWindow++;
+        }
+    }
+
+    @Override//重写关闭操作，关闭窗口就重新开始游戏
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            GameFrame.restartBtn.doClick();
+        }
+        super.processWindowEvent(e);
     }
 }

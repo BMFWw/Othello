@@ -1,5 +1,7 @@
 package view;
 
+import components.ChessGridComponent;
+
 import javax.swing.*;
 import java.net.URL;
 
@@ -11,4 +13,5 @@ public class picturesInput extends JFrame {
     public static String startBackground = new String("CHESS/src/view/pictures/background.png");
     public static URL start = StartWindow.class.getResource("pictures/StartGame.png");
     public static  URL rule = StartWindow.class.getResource("pictures/rule.png");
+    public static  URL whiteChessPiece = ChessGridComponent.class.getResource("pictures/whiteChessPiece.png");
 }

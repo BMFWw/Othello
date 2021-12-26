@@ -107,8 +107,13 @@ public class ChessGridComponent extends BasicComponent {
         g.setColor(gridColor);
         g.fillRect(2, 2, this.getWidth() - 2, this.getHeight() - 2);
         if (this.chessPiece != null) {
+          /*  if(GameFrame.controller.getCurrentPlayer()==ChessPiece.WHITE){
+
+                Image whiteChess = Toolkit.getDefaultToolkit().createImage(view.picturesInput.whiteChessPiece);
+                g.drawImage(whiteChess,(gridSize - chessSize) / 2,(gridSize - chessSize) / 2,chessSize,chessSize,this);
+            }*/
             g.setColor(chessPiece.getColor());
-            g.fillOval((gridSize - chessSize) / 2, (gridSize - chessSize) / 2, chessSize, chessSize);
+            g.fillOval( (gridSize - chessSize) / 2, (gridSize - chessSize) / 2, chessSize, chessSize);
         }
     }
 

@@ -4,11 +4,13 @@ import music.bgm;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StartWindow extends JFrame {
+    public static JFrame gameWindow = new JFrame("2021F CS102A Project Reversi");//创建面板标题
     public void gameWindow() {
-        //创建面板标题
-        this.setTitle("2021F CS102A Project Reversi");
+
         //插入背景图片
         ImageIcon background = new ImageIcon(picturesInput.startBackground);
         background.setImage(background.getImage().getScaledInstance(960, 540, Image.SCALE_DEFAULT));
@@ -33,14 +35,14 @@ public class StartWindow extends JFrame {
         button2.setBounds(165, 370, 200, 50);
 
         //初始化面板
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(960, 540);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.setResizable(false);
+        gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        gameWindow.setSize(960, 540);
+        gameWindow.setLocationRelativeTo(null);
+        gameWindow.setVisible(true);
+        gameWindow.setResizable(false);
 
         //设置面板中容器，并设置自由布局类型
-        Container container = this.getContentPane();
+        Container container = gameWindow.getContentPane();
         container.setLayout(null);
 
         //向容器中添加组件（jLabel为背景的组件）
@@ -50,11 +52,15 @@ public class StartWindow extends JFrame {
         new bgm().run();
 
         //开始游戏按钮的监听器
-        button1.addActionListener(e -> {
-            GameFrame mainFrame = new GameFrame(800);
-            mainFrame.setVisible(true);
-            setVisible(false);//点击开始游戏后隐藏主页面
-            //插入游戲棋盤界面
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameWindow.setVisible(false);
+                GameFrame mainFrame = new GameFrame(800);
+                mainFrame.setVisible(true);
+                //点击开始游戏后关闭主页面
+                //插入游戲棋盤界面
+            }
         });
 
         //游戏规则按钮的监听器

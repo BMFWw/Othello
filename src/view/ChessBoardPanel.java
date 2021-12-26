@@ -119,27 +119,18 @@ public class ChessBoardPanel extends JPanel {
         return arrayBoard;
     }
 
-    public static ChessGridComponent[][] setArrayToBoard(int[][] array){
-        ChessGridComponent[][] board = new ChessGridComponent[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessGridComponent gridComponent = new ChessGridComponent(i, j);
-                gridComponent.setLocation(j * gridSize, i * gridSize);
-                board[i][j] = gridComponent;
-            }
-        }
+    public static void setArrayToBoard(int[][] array){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(array[i][j] == -1){
-                    board[i][j].setChessPiece(ChessPiece.BLACK);
+                    chessGrids[i][j].setChessPiece(ChessPiece.BLACK);
                 }if(array[i][j] == 1){
-                    board[i][j].setChessPiece(ChessPiece.WHITE);
-                }else{
-                    board[i][j].setChessPiece(null);
+                    chessGrids[i][j].setChessPiece(ChessPiece.WHITE);
+                }if(array[i][j] == 0){
+                    chessGrids[i][j].setChessPiece(null);
                 }
             }
         }
-        return board;
     }
 
     public static boolean canPut(ChessGridComponent[][] board, int nextMove, int row, int col){

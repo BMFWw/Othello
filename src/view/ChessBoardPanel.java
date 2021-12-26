@@ -133,34 +133,6 @@ public class ChessBoardPanel extends JPanel {
         }
     }
 
-    public static void hardAI(){
-        ChessGridComponent[][] tempBoard = new ChessGridComponent[8][8];
-        int max = 0;
-        int maxRow = 0;
-        int maxCol = 0;
-        for(int i=0;i<8;i++){
-            for(int e=0;e<8;e++){
-                int counter = 0;
-                if(GameFrame.chessBoardPanel.canClickGrid(i,e,GameFrame.controller.getCurrentPlayer())){
-                    tempBoard = Move(chessGrids,GameFrame.controller.getCurrentPlayer(),i,e);
-                    for(int j=0;i<8;i++){
-                        for(int k=0;e<8;e++){
-                            if(chessGrids[j][k] != tempBoard[j][k]){
-                                counter++;
-                            }
-                        }
-                    }
-                    if(counter > max){
-                        max = counter;
-                        maxRow = i;
-                        maxCol = e;
-                    }
-                }
-            }
-        }
-        Move(chessGrids,GameFrame.controller.getCurrentPlayer(),maxRow,maxCol);
-    }
-
     public static boolean canPut(ChessGridComponent[][] board, int nextMove, int row, int col){
         int[][] arrayBoard = setBoardToArray(board);
         int[][] directions = new int[][]{

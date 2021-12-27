@@ -2,10 +2,9 @@ package components;
 
 import controller.GameController;
 import model.ChessPiece;
-import music.MusicInput;
-import music.MusicPlayer;
 import view.ChessBoardPanel;
 import view.GameFrame;
+import view.StartWindow;
 import view.picturesInput;
 
 import javax.swing.*;
@@ -21,8 +20,8 @@ public class ChessGridComponent extends BasicComponent {
     private int row;
     private int col;
     public static int cheatModel = -1;//默认关闭
+    public static int AI = -1;
     public static int countWindow = 0;//用于防止打开多个结束窗口
-    public static MusicPlayer click = new MusicPlayer("CHESS\\src\\music\\click.wav");//创建音乐路径
 
 
     public ChessGridComponent() {
@@ -43,35 +42,52 @@ public class ChessGridComponent extends BasicComponent {
 
     @Override
     public void onMouseClicked() {
-        MusicInput.click.over();
         System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(), row, col);
         //todo: complete mouse click method
+
 
         if (cheatModel == -1) {//cheatModel关闭
             if (GameFrame.controller.canClick(row, col)) {//规定在哪能下
                 if (this.chessPiece == null) {
                     this.chessPiece = GameFrame.controller.getCurrentPlayer();
                 }
-                GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
+                GameFrame.chessBoardPanel.
+                        changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
                 repaint();
+                int p = 0;
+                if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
+                    p = -1;
+                }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
+                    p = 1;
+                }
+                String s = row + " " + col + " " + cheatModel + " " + p;
+                GameFrame.step.add(s);
+                GameFrame.stepCount++;
                 GameFrame.controller.swapPlayer();
-                MusicInput.click.play();//能下子才发声
-
+                if(AI == 1 && StartWindow.hard == 1){
+                    GameFrame.chessBoardPanel.hardAI();
+                    repaint();
+                    GameFrame.controller.swapPlayer();
+                }else if(AI == 1 && StartWindow.easy == 1){
+                    GameFrame.chessBoardPanel.easyAI();
+                    repaint();
+                    GameFrame.controller.swapPlayer();
+                }
             } else {
                 System.out.printf("Cannot click on this square\n");
             }
+
         } else {
             if(countWindow == 0) {
-                if (this.chessPiece == null) {
+                if (this.chessPiece == null) {//只能下空的地方
                     this.chessPiece = GameFrame.controller.getCurrentPlayer();
                     GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
                     repaint();
                     GameFrame.controller.swapPlayer();
-                    MusicInput.click.play();
                 }
             }
-
         }
+
 
         //判断区域 resultJudge是在没有子下的前提下实现的，白大返回1，黑大返回-1，黑白平返回0
         int resultJudge = new ChessGridComponent().resultJudge();//判断游戏是否结束在resultJudge中实现了 此时返回值
@@ -132,6 +148,8 @@ public class ChessGridComponent extends BasicComponent {
         if (GameFrame.controller.canClick(row, col)) {//本方法自带遍历棋盘 若能下则显示高光
             drawPieceCanPut(g);
         }
+
+
     }
 
     public boolean judge(ChessPiece chessPiece) {//判断是否结束 返回是或不是

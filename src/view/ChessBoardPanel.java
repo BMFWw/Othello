@@ -12,6 +12,7 @@ import static components.ChessGridComponent.gridSize;
 public class ChessBoardPanel extends JPanel {
     private final int CHESS_COUNT = 8;
     public static ChessGridComponent[][] chessGrids;
+    private int[][] tempBoard;
 
     public ChessBoardPanel(int width, int height) {
         this.setVisible(true);
@@ -40,6 +41,7 @@ public class ChessBoardPanel extends JPanel {
     public void setChessGrids(ChessGridComponent[][] chessGrids) {
         this.chessGrids = chessGrids;
     }
+
 
     public ChessGridComponent[][] getChessGrids() {
         return chessGrids;
@@ -78,6 +80,84 @@ public class ChessBoardPanel extends JPanel {
                 chessGrids[i][e].setChessPiece(null);
             }
         }
+    }
+
+    public void hardAI(){
+        ChessGridComponent[][] tempBoard = new ChessGridComponent[8][8];
+        int max=0;
+        int maxRow=0;
+        int maxCol=0;
+        for(int i=0;i<8;i++){
+            for(int e=0;e<8;e++){
+                tempBoard = GameFrame.chessBoardPanel.getChessGrids();
+                int counter = 0;
+                if(GameFrame.chessBoardPanel.canClickGrid(i,e,GameFrame.controller.getCurrentPlayer())){
+                    tempBoard = Move(tempBoard,GameFrame.controller.getCurrentPlayer(),i,e);
+                    for(int j=0;i<8;i++){
+                        for (int k = 0; e < 8; e++){
+                            if(GameFrame.chessBoardPanel.getChessGrids()[j][k].getChessPiece() != tempBoard[j][k].getChessPiece()){
+                                counter++;
+                            }
+                        }
+                    }
+                }
+                if(counter>max){
+                    max = counter;
+                    maxRow = i;
+                    maxCol = e;
+                }
+            }
+        }
+        GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),maxRow,maxCol);
+        System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(),maxRow,maxCol);
+        int p = 0;
+        if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
+            p = -1;
+        }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
+            p = 1;
+        }
+        String s = maxRow + " " + maxCol + " " + ChessGridComponent.cheatModel + " " + p;
+        GameFrame.step.add(s);
+        GameFrame.stepCount++;
+    }
+
+    public void easyAI(){
+        ChessGridComponent[][] tempBoard = new ChessGridComponent[8][8];
+        int min=64;
+        int minRow=0;
+        int minCol=0;
+        for(int i=0;i<8;i++){
+            for(int e=0;e<8;e++){
+                tempBoard = GameFrame.chessBoardPanel.getChessGrids();
+                int counter = 0;
+                if(GameFrame.chessBoardPanel.canClickGrid(i,e,GameFrame.controller.getCurrentPlayer())){
+                    tempBoard = Move(tempBoard,GameFrame.controller.getCurrentPlayer(),i,e);
+                    for(int j=0;i<8;i++){
+                        for (int k = 0; e < 8; e++){
+                            if(GameFrame.chessBoardPanel.getChessGrids()[j][k].getChessPiece() != tempBoard[j][k].getChessPiece()){
+                                counter--;
+                            }
+                        }
+                    }
+                }
+                if(counter<min){
+                    min = counter;
+                    minRow = i;
+                    minCol = e;
+                }
+            }
+        }
+        GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),minRow,minCol);
+        System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(),minRow,minCol);
+        int p = 0;
+        if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
+            p = -1;
+        }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
+            p = 1;
+        }
+        String s = minRow + " " + minCol + " " + ChessGridComponent.cheatModel + " " + p;
+        GameFrame.step.add(s);
+        GameFrame.stepCount++;
     }
 
 

@@ -20,7 +20,6 @@ public class StatusPanel extends JPanel {
         this.playerLabel.setFont(new Font("Calibri", Font.BOLD, 30));
         this.playerLabel.setForeground(new Color(0, 255, 255));//////////
         this.setPlayerText(ChessPiece.BLACK.name());
-        //this.setPlayerText(ChessPiece.BLACK.name());
         add(playerLabel);
 
         this.scoreLabel = new JLabel();
@@ -41,5 +40,9 @@ public class StatusPanel extends JPanel {
     public void setPlayerText(String playerText) {
         this.playerLabel.setText(playerText + "'s turn");
     }
-    
+
+    public void refresh(){
+        this.setPlayerText(GameFrame.controller.getCurrentPlayer().name());
+        this.setScoreText(GameFrame.controller.getBlackScore(),GameFrame.controller.getWhiteScore());
+    }
 }

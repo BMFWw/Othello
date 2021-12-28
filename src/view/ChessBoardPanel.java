@@ -12,7 +12,7 @@ import static components.ChessGridComponent.gridSize;
 public class ChessBoardPanel extends JPanel {
     private final int CHESS_COUNT = 8;
     public static ChessGridComponent[][] chessGrids;
-    private int[][] tempBoard;
+    public static ChessGridComponent[][] tempBoard;
 
     public ChessBoardPanel(int width, int height) {
         this.setVisible(true);
@@ -83,23 +83,58 @@ public class ChessBoardPanel extends JPanel {
     }
 
     public void hardAI(){
-        ChessGridComponent[][] tempBoard = new ChessGridComponent[8][8];
+        int[][] tempBoard = new int[8][8];
+        int[][] aftBoard = new int[8][8];
+        ChessGridComponent[][] TempBoard = new ChessGridComponent[8][8];
+        for(int i=0;i<8;i++) {
+            for (int e = 0; e < 8; e++) {
+                tempBoard[i][e] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[i][e];
+                System.out.print(tempBoard[i][e]);
+            }
+            System.out.println();
+        }
+
+        for(int i=0;i<8;i++) {
+            for (int e = 0; e < 8; e++) {
+                aftBoard[i][e] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[i][e];
+                System.out.print(aftBoard[i][e]);
+            }
+            System.out.println();
+        }
+
         int max=0;
         int maxRow=0;
         int maxCol=0;
+        int p = 0;
+        if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
+            p = -1;
+        }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
+            p = 1;
+        }
+
         for(int i=0;i<8;i++){
             for(int e=0;e<8;e++){
-                tempBoard = GameFrame.chessBoardPanel.getChessGrids();
                 int counter = 0;
-                if(GameFrame.chessBoardPanel.canClickGrid(i,e,GameFrame.controller.getCurrentPlayer())){
-                    tempBoard = Move(tempBoard,GameFrame.controller.getCurrentPlayer(),i,e);
-                    for(int j=0;i<8;i++){
-                        for (int k = 0; e < 8; e++){
-                            if(GameFrame.chessBoardPanel.getChessGrids()[j][k].getChessPiece() != tempBoard[j][k].getChessPiece()){
+                if(GameFrame.chessBoardPanel.canPut(GameFrame.chessBoardPanel.getChessGrids(),p,i,e)){
+
+                    for(int w=0;w<8;w++) {
+                        for (int s = 0; s < 8; s++) {
+                            aftBoard[w][s] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[w][s];
+                            System.out.print(aftBoard[w][s]);
+                        }
+                        System.out.println();
+                    }
+
+                    aftBoard = Move(aftBoard,GameFrame.controller.getCurrentPlayer(),i,e);
+
+                    for(int j=0;j<8;j++){
+                        for (int k = 0; k < 8; k++){
+                            if(aftBoard[j][k] != tempBoard[j][k]){
                                 counter++;
                             }
                         }
                     }
+
                 }
                 if(counter>max){
                     max = counter;
@@ -108,53 +143,83 @@ public class ChessBoardPanel extends JPanel {
                 }
             }
         }
+
+        System.out.println(max);
+        System.out.println(maxCol);
         GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),maxRow,maxCol);
         System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(),maxRow,maxCol);
-        int p = 0;
-        if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
-            p = -1;
-        }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
-            p = 1;
-        }
         String s = maxRow + " " + maxCol + " " + ChessGridComponent.cheatModel + " " + p;
         GameFrame.step.add(s);
         GameFrame.stepCount++;
     }
 
     public void easyAI(){
-        ChessGridComponent[][] tempBoard = new ChessGridComponent[8][8];
-        int min=64;
+        int[][] tempBoard = new int[8][8];
+        int[][] aftBoard = new int[8][8];
+        ChessGridComponent[][] TempBoard = new ChessGridComponent[8][8];
+        for(int i=0;i<8;i++) {
+            for (int e = 0; e < 8; e++) {
+                tempBoard[i][e] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[i][e];
+                System.out.print(tempBoard[i][e]);
+            }
+            System.out.println();
+        }
+
+        for(int i=0;i<8;i++) {
+            for (int e = 0; e < 8; e++) {
+                aftBoard[i][e] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[i][e];
+                System.out.print(aftBoard[i][e]);
+            }
+            System.out.println();
+        }
+
+        int min=0;
         int minRow=0;
         int minCol=0;
-        for(int i=0;i<8;i++){
-            for(int e=0;e<8;e++){
-                tempBoard = GameFrame.chessBoardPanel.getChessGrids();
-                int counter = 0;
-                if(GameFrame.chessBoardPanel.canClickGrid(i,e,GameFrame.controller.getCurrentPlayer())){
-                    tempBoard = Move(tempBoard,GameFrame.controller.getCurrentPlayer(),i,e);
-                    for(int j=0;i<8;i++){
-                        for (int k = 0; e < 8; e++){
-                            if(GameFrame.chessBoardPanel.getChessGrids()[j][k].getChessPiece() != tempBoard[j][k].getChessPiece()){
-                                counter--;
-                            }
-                        }
-                    }
-                }
-                if(counter<min){
-                    min = counter;
-                    minRow = i;
-                    minCol = e;
-                }
-            }
-        }
-        GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),minRow,minCol);
-        System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(),minRow,minCol);
         int p = 0;
         if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
             p = -1;
         }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
             p = 1;
         }
+
+        for(int i=0;i<8;i++){
+            for(int e=0;e<8;e++){
+                int counter = 64;
+                if(GameFrame.chessBoardPanel.canPut(GameFrame.chessBoardPanel.getChessGrids(),p,i,e)){
+
+                    for(int w=0;w<8;w++) {
+                        for (int s = 0; s < 8; s++) {
+                            aftBoard[w][s] = setBoardToArray(GameFrame.chessBoardPanel.getChessGrids())[w][s];
+                            System.out.print(aftBoard[w][s]);
+                        }
+                        System.out.println();
+                    }
+
+                    aftBoard = Move(aftBoard,GameFrame.controller.getCurrentPlayer(),i,e);
+
+                    for(int j=0;j<8;j++){
+                        for (int k = 0; k < 8; k++){
+                            if(aftBoard[j][k] != tempBoard[j][k]){
+                                counter--;
+                            }
+                        }
+                    }
+
+                }
+
+                if(counter>min && counter != 64){
+                    min = counter;
+                    minRow = i;
+                    minCol = e;
+                }
+            }
+        }
+
+        System.out.println(min);
+        System.out.println(minCol);
+        GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(),minRow,minCol);
+        System.out.printf("%s clicked (%d, %d)\n", GameFrame.controller.getCurrentPlayer(),minRow,minCol);
         String s = minRow + " " + minCol + " " + ChessGridComponent.cheatModel + " " + p;
         GameFrame.step.add(s);
         GameFrame.stepCount++;
@@ -255,7 +320,7 @@ public class ChessBoardPanel extends JPanel {
         }
     }
 
-    public static ChessGridComponent[][]  Move(ChessGridComponent[][] board, ChessPiece currentPlayer ,int x,int y) {
+    public static ChessGridComponent[][] Move(ChessGridComponent[][] board, ChessPiece currentPlayer , int x, int y) {
 
         int[] xdirection = {-1, -1, 0, 1, 1, 1, 0, -1};
         int[] ydirection = {0, 1, 1, 1, 0, -1, -1, -1};
@@ -285,6 +350,53 @@ public class ChessBoardPanel extends JPanel {
                     tempy = y + ydirection[k];
                     while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && board[tempx][tempy].getChessPiece() != null && board[tempx][tempy].getChessPiece() != currentPlayer) {
                         board[tempx][tempy].setChessPiece(currentPlayer);
+                        tempx += xdirection[k];
+                        tempy += ydirection[k];
+                    }
+                }
+            }
+        }
+        return board;
+    }
+
+    public static int[][] Move(int[][] board, ChessPiece currentPlayer , int x, int y) {
+        int player=0;
+        int[] xdirection = {-1, -1, 0, 1, 1, 1, 0, -1};
+        int[] ydirection = {0, 1, 1, 1, 0, -1, -1, -1};
+
+        if(currentPlayer==ChessPiece.BLACK){
+            board[x][y]=-1;
+            player = -1;
+        }if(currentPlayer==ChessPiece.WHITE){
+            board[x][y]=1;
+            player=1;
+        }else{
+            return board;
+        }
+
+        for (int k = 0; k < 8; k++) {
+            int tempx = x + xdirection[k];
+            int tempy = y + ydirection[k];
+            if ((tempx < 0 || tempx > 7) || (tempy < 0 || tempy > 7)) {
+                continue;
+            }
+            if (board[tempx][tempy] == 0) {
+                continue;
+            }
+            if (board[tempx][tempy] != player) {
+                while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && board[tempx][tempy] != 0 && board[tempx][tempy] != player) {
+
+                    tempx += xdirection[k];
+                    tempy += ydirection[k];
+                }
+                if (tempx < 0 || tempy > 7 || tempy < 0 || tempx > 7) {
+                    continue;
+                }
+                if (board[tempx][tempy] == player) {
+                    tempx = x + xdirection[k];
+                    tempy = y + ydirection[k];
+                    while (tempx >= 0 && tempy >= 0 && tempx <= 7 && tempy <= 7 && board[tempx][tempy] != 0 && board[tempx][tempy] != player) {
+                        board[tempx][tempy]=player;
                         tempx += xdirection[k];
                         tempy += ydirection[k];
                     }

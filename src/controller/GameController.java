@@ -147,6 +147,10 @@ public class GameController {
                         ErrorWindow.code = 105;
                         ErrorWindow error = new ErrorWindow();
                         return;
+                    }else if(GameFrame.chessBoardPanel.canPut(GameFrame.chessBoardPanel.getChessGrids(),p,r,c)==false && cheat == 1){
+                        String s = r + " " + c + p;
+                        GameFrame.step.add(s);
+                        GameFrame.chessBoardPanel.changePanel(currentPlayer,r,c);
                     }
                 }
                 for(int i=0;i<8;i++){
@@ -198,7 +202,7 @@ public class GameController {
             ErrorWindow error = new ErrorWindow();
             return;
         } catch (Exception e){
-            ErrorWindow.code = 103;
+            ErrorWindow.code = 106;
             ErrorWindow error = new ErrorWindow();
             return;
         }

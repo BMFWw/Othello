@@ -51,8 +51,7 @@ public class ChessGridComponent extends BasicComponent {
                 if (this.chessPiece == null) {
                     this.chessPiece = GameFrame.controller.getCurrentPlayer();
                 }
-                GameFrame.chessBoardPanel.
-                        changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
+                GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
                 repaint();
                 int p = 0;
                 if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
@@ -83,7 +82,25 @@ public class ChessGridComponent extends BasicComponent {
                     this.chessPiece = GameFrame.controller.getCurrentPlayer();
                     GameFrame.chessBoardPanel.changePanel(GameFrame.controller.getCurrentPlayer(), row, col);
                     repaint();
+                    int p = 0;
+                    if(GameFrame.controller.getCurrentPlayer() == ChessPiece.BLACK){
+                        p = -1;
+                    }else if(GameFrame.controller.getCurrentPlayer() == ChessPiece.WHITE){
+                        p = 1;
+                    }
+                    String s = row + " " + col + " " + cheatModel + " " + p;
+                    GameFrame.step.add(s);
+                    GameFrame.stepCount++;
                     GameFrame.controller.swapPlayer();
+                    if(AI == 1 && StartWindow.hard == 1){
+                        GameFrame.chessBoardPanel.hardAI();
+                        repaint();
+                        GameFrame.controller.swapPlayer();
+                    }else if(AI == 1 && StartWindow.easy == 1) {
+                        GameFrame.chessBoardPanel.easyAI();
+                        repaint();
+                        GameFrame.controller.swapPlayer();
+                    }
                 }
             }
         }
